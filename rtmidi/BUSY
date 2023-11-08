@@ -1,0 +1,13 @@
+
+let sources* : SourceSet {
+    .sources += [
+        ./RtMidi.cpp
+    ]
+    .cflags_cc += "-std=c++11"
+    if target_os == `linux {
+        .defines += "__LINUX_ALSA__"
+    }else
+    {
+        .defines += "__MACOSX_CORE__"
+    }
+}

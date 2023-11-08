@@ -1,0 +1,23 @@
+submod qt = ../LeanQt (HAVE_ITEMVIEWS)
+submod rtmidi = ../rtmidi
+
+let run_moc : Moc {
+    .sources += ./MidiEngine.h
+}
+
+let main ! : Executable {
+    .sources += [
+        ./MidiEngine.cpp
+    ]
+    .configs += qt.qt_client_config;
+    .deps += [ qt.libqt rtmidi.sources run_moc ]
+    .name = "MidiSink"
+    .include_dirs += ../rtmidi
+    if target_os == `linux {
+        .lib_names += [ "pthread" "asound" ]
+    }else if target_os == `macos {
+        .frameworks += [ "CoreMidi" "CoreAudio" ]
+    }
+
+    .cflags_cc += "-std=c++11"
+}
